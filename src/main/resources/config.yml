@@ -1,0 +1,90 @@
+# ==================== SkyGuard ====================
+# Система очков нарушений (VL):
+#   каждое срабатывание проверки добавляет VL;
+#   при watch-vl игрок берётся "под наблюдение" (слежка) - модераторы видят все его срабатывания,
+#   проверки к нему становятся строже;
+#   при punish-vl игрока "возносит" в воздух и телепортирует на точку проверки (/setcheater).
+
+detection:
+  watch-vl: 3.0
+  punish-vl: 8.0
+  decay-per-second: 0.1        # VL падает со временем (0.1 = 1 VL за 10 сек)
+  watch-seconds: 300           # сколько длится наблюдение после последнего срабатывания
+  strict-factor: 0.85          # во время наблюдения лимиты скорости умножаются на это число
+
+checks:
+  speed:
+    enabled: true
+    tolerance: 1.2             # запас на лаги. Больше = меньше ложных срабатываний
+    ice-multiplier: 2.5        # множитель лимита на льду
+  fly:
+    enabled: true
+  reach:
+    enabled: true
+    tolerance: 1.0             # запас к стандартной дальности удара (3 блока)
+    cancel-hit: true           # отменять удар, если дальность нереальна
+  autoclicker:
+    enabled: true
+    max-cps: 25                # кликов в секунду
+  xray:
+    enabled: true
+    window-seconds: 900        # окно статистики (сбрасывается через это время)
+    min-hidden-ores: 4         # сколько СКРЫТЫХ руд нужно найти, чтобы начать подозревать
+    max-ratio: 0.08            # допустимо скрытых руд на 1 блок породы (0.08 = 1 руда на ~12 блоков)
+    ores:
+      - DIAMOND_ORE
+      - DEEPSLATE_DIAMOND_ORE
+      - EMERALD_ORE
+      - DEEPSLATE_EMERALD_ORE
+      - ANCIENT_DEBRIS
+      - GOLD_ORE
+      - DEEPSLATE_GOLD_ORE
+      - NETHER_GOLD_ORE
+      - REDSTONE_ORE
+      - DEEPSLATE_REDSTONE_ORE
+      - LAPIS_ORE
+      - DEEPSLATE_LAPIS_ORE
+
+# Анимация перед отправкой на проверку
+animation:
+  ticks: 60                    # длительность (20 тиков = 1 сек)
+  height: 7.0                  # максимальная высота подъёма (упирается в потолок)
+
+# Карантин для читеров
+quarantine:
+  radius: 6.0                  # игрок на проверке не может отойти от точки дальше (0 = без ограничения)
+  reminder-seconds: 60         # как часто напоминать игроку про проверку
+  allowed-commands: [msg, tell, w, r, reply, helpop]
+
+# Утешительный приз после /nocheat
+prize:
+  items:
+    - DIAMOND:5
+    - GOLDEN_APPLE:3
+    - COOKED_BEEF:32
+  xp-levels: 5
+  commands: []                 # команды от консоли, например: "eco give %player% 500"
+
+# Что выполнить по /cheatconfirm <ник> [причина]
+confirm-commands:
+  - "ban %player% Использование читов (%reason%)"
+
+messages:
+  caught-title: "&c&lПОДОЗРИТЕЛЬНАЯ АКТИВНОСТЬ"
+  caught-subtitle: "&7Вы направлены на проверку"
+  caught-chat: "&c[Система] &fСистема заметила подозрительную активность. В скором времени прибудут модераторы, администраторы или создатель, чтобы вас проверить."
+  arrived: "&e[Система] &fВы на месте проверки. Пожалуйста, ожидайте и не выходите с сервера."
+  reminder: "&e[Система] &fВы всё ещё на проверке. Ожидайте модератора."
+  blocked: "&c[Система] &fВо время проверки это действие недоступно."
+  released: "&a[Система] &fПроверка завершена - читов не найдено. Приносим извинения за неудобства!"
+  prize: "&a[Система] &fВ качестве извинения - небольшой приз!"
+  staff-watch: "&e[SkyGuard] &f%player% &7взят под наблюдение (%check%)"
+  staff-flag: "&c[SkyGuard] &f%player% &7- &e%check% &7%info% &8(VL %vl%)"
+  staff-caught: "&4[SkyGuard] &f%player% &cотправлен на проверку &7(%reason%)."
+  staff-quit: "&6[SkyGuard] &f%player% &eвышел во время отправки на проверку - при входе попадёт на точку."
+  staff-no-spot: "&4[SkyGuard] &fИгрок %player% подозрителен, но точка проверки не задана! Зайдите на нужное место и выполните /setcheater"
+  spot-set: "&a[SkyGuard] Точка для читеров установлена: &f%loc%"
+  not-in-check: "&c[SkyGuard] Этот игрок сейчас не на проверке."
+  cleared-staff: "&a[SkyGuard] &f%mod% &7снял проверку с &f%player%&7: читов нет."
+  confirmed-staff: "&4[SkyGuard] &f%mod% &cподтвердил читы у &f%player%&c."
+  reloaded: "&a[SkyGuard] Конфиг перезагружен."

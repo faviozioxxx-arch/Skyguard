@@ -1,0 +1,36 @@
+name: SkyGuard
+version: 1.0.0
+main: me.skyguard.SkyGuard
+api-version: '1.21'
+description: Античит с наблюдением, анимацией вознесения и карантином для читеров
+commands:
+  setcheater:
+    description: Установить точку, куда телепортируются читеры
+    usage: /setcheater
+    permission: skyguard.admin
+  nocheat:
+    description: Снять проверку - читов не найдено, игрок возвращается назад
+    usage: /nocheat <ник> [noprize]
+    permission: skyguard.moderate
+  cheatconfirm:
+    description: Подтвердить читы и выполнить наказание из config.yml
+    usage: /cheatconfirm <ник> [причина]
+    permission: skyguard.moderate
+  skyguard:
+    description: Управление античитом
+    usage: /skyguard <reload|list|vl|send>
+    aliases: [sg]
+    permission: skyguard.admin
+permissions:
+  skyguard.admin:
+    description: Настройка античита (/setcheater, /skyguard)
+    default: op
+  skyguard.moderate:
+    description: Проверка игроков (/nocheat, /cheatconfirm)
+    default: op
+  skyguard.alerts:
+    description: Получать уведомления о подозрительных игроках
+    default: op
+  skyguard.bypass:
+    description: Полный обход античита (по умолчанию нет даже у операторов)
+    default: false
